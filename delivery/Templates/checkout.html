@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<h1>Checkout</h1>
+<h2>Welcome, {{ username }}</h2>
+
+{% if error %}
+<p style="color:red;">{{ error }}</p>
+{% else %}
+
+<table border="1">
+    {% for item in cart_items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>₹{{ item.price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Total: ₹{{ total_price }}</h3>
+
+<button id="rzp-button">Pay with Razorpay</button>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key_id }}",
+    "amount": "{{ amount_paise }}",
+    "currency": "INR",
+    "name": "MealMate",
+    "description": "Food Payment",
+    "order_id": "{{ order_id }}",
+
+    "handler": function (response){
+        alert("Payment Successful!");
+    }
+};
+
+var rzp1 = new Razorpay(options);
+
+document.getElementById('rzp-button').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+{% endif %}
+
+</body>
+</html>
